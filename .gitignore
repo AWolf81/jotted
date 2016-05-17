@@ -1,4 +1,4 @@
 /node_modules/
 build/
-sauce_connect.log
+.log
 *.kate-swp
