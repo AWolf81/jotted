@@ -6,8 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title></title>
 
-  <link rel="stylesheet" href="/bower_components/mocha/mocha.css">
-  <link rel="stylesheet" href="/jotted.css">
+  <!-- load mocha first to avoid loading timing issues -->
+  <script src="../bower_components/mocha/mocha.js"></script>
+  <link rel="stylesheet" href="../bower_components/mocha/mocha.css">
+  <link rel="stylesheet" href="../jotted.css">
 
   <link rel="stylesheet" href="tests.css">
 </head>
@@ -22,10 +24,9 @@
   <div class="fixtures"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.js"></script>
-  <script src="/jotted.js"></script>
+  <script src="../jotted.js"></script>
 
-  <script src="/bower_components/mocha/mocha.js"></script>
-  <script src="/bower_components/chai/chai.js"></script>
+  <script src="../bower_components/chai/chai.js"></script>
 
   <script>
     mocha.setup('bdd');
@@ -41,7 +42,14 @@
 
   <script>
     onload = function() {
-      var runner = mocha.run();
+      var runner, mochaPhantomJS = window.mochaPhantomJS;
+
+      if ( mochaPhantomJS ) {
+        runner = mochaPhantomJS.run();
+      } else {
+        mocha.setup('bdd');
+        runner = mocha.run();
+      }
 
       var failedTests = [];
       runner.on('end', function(){

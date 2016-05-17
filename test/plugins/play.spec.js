@@ -162,4 +162,37 @@ describe('Play Plugin', function () {
 
     jotted.play.done('change', change1)
   })
+
+  it('should trigger run if requested (forceRun)', function (done) {
+    var newParams = {
+      type: 'html',
+      content: '<h1>Loaded</h1>',
+      play: {
+        forceRun: true
+      }
+    }
+    jotted.play = new Jotted(dom.$play, {
+      files: [{
+        type: 'html',
+        content: '<h1>Original</h1>'
+      }],
+      plugins: ['play']
+    })
+
+    var changeText = function () {
+      jotted.play.off('change', changeText)
+      jotted.play.done('change', checkContent)
+
+      jotted.play.trigger('change', newParams)
+      // var $textareaHTML = dom.$play.querySelector('.jotted-pane-html textarea')
+      // $textareaHTML.value = '<h1>Changed Text</h1>'
+      // $textareaHTML.dispatchEvent(changeEvent)
+    }
+
+    var checkContent = window.util.check(done, function () {
+      expect(dom.$play.querySelector('.jotted-pane-result   iframe').contentWindow.document.querySelector('h1').innerHTML).to.equal('Loaded')
+    })
+
+    jotted.play.done('change', changeText)
+  })
 })

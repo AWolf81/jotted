@@ -59,6 +59,14 @@ export default class PluginPlay {
 
     // replace the params with the latest cache
     if (typeof this.cache[params.type] !== 'undefined') {
+      // check if there is a flag to trigger run
+      if (this.code[params.type].play &&
+         (this.code[params.type].play.forceRun === true)) {
+        this.run()
+        // clear force to just run once (don't cache)
+        this.code[params.type].play.forceRun = null
+      }
+
       callback(null, this.cache[params.type])
 
       // make sure we don't cache forceRender,

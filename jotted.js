@@ -214,9 +214,9 @@
     }
 
     // try the file type (html/css/js)
-    for (var key in modemap) {
-      if (type === key) {
-        return modemap[key];
+    for (var _key in modemap) {
+      if (type === _key) {
+        return modemap[_key];
       }
     }
 
@@ -302,8 +302,8 @@
 
     this._get('options').plugins.forEach(function (plugin) {
       // check if plugin definition is string or object
-      var Plugin = undefined;
-      var pluginName = undefined;
+      var Plugin = void 0;
+      var pluginName = void 0;
       var pluginOptions = {};
       if (typeof plugin === 'string') {
         pluginName = plugin;
@@ -1285,6 +1285,13 @@
 
         // replace the params with the latest cache
         if (typeof this.cache[params.type] !== 'undefined') {
+          // check if there is a flag to trigger run
+          if (this.code[params.type].play && this.code[params.type].play.forceRun === true) {
+            this.run();
+            // clear force to just run once (don't cache)
+            this.code[params.type].play.forceRun = null;
+          }
+
           callback(null, this.cache[params.type]);
 
           // make sure we don't cache forceRender,
@@ -1405,8 +1412,8 @@
 
       var _arr = ['html', 'css', 'js'];
       for (var _i = 0; _i < _arr.length; _i++) {
-        var type = _arr[_i];
-        this.markup(type);
+        var _type = _arr[_i];
+        this.markup(_type);
       }
 
       // textarea change events.
@@ -1431,8 +1438,8 @@
       // load files
       var _arr2 = ['html', 'css', 'js'];
       for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
-        var type = _arr2[_i2];
-        this.load(type);
+        var _type2 = _arr2[_i2];
+        this.load(_type2);
       }
 
       // show all tabs, even if empty
