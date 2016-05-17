@@ -44,6 +44,10 @@ module.exports = function (grunt) {
           'site/{,*/}*.{hbs,html,md}'
         ],
         tasks: [ 'assemble' ]
+      },
+      test: {
+        files: 'test/**/*.js',
+        tasks: ['mocha_phantomjs']
       }
     },
     connect: {
@@ -166,6 +170,33 @@ module.exports = function (grunt) {
         }
       }
     },
+    // mocha: {
+    //   test: {
+    //     src: ['tests/**/*.html'],
+    //   },
+    // },
+    mocha_phantomjs: {
+      all: {
+        src: 'test/**/*.html',
+        options: {
+          urls: [
+            'http://127.0.0.1:9000/test/',
+          ]
+        }
+      }
+    },
+    // mochaTest: {
+    // // Configure a mochaTest task --> I don't have a saucelab account
+    //   test: {
+    //     options: {
+    //       reporter: 'spec',
+    //       //captureFile: 'results.txt', // Optionally capture the reporter output to a file
+    //       quiet: false, // Optionally suppress output to standard out (defaults to false)
+    //       clearRequireCache: false // Optionally clear the require cache before running tests (defaults to false)
+    //     },
+    //     src: ['test/**/*.js']
+    //   }
+    // },
     assemble: {
       options: {
         layoutdir: 'site/layouts',
@@ -259,6 +290,13 @@ module.exports = function (grunt) {
     'default',
     'connect:test',
     'saucelabs-mocha'
+  ])
+
+  grunt.registerTask('test:local', 'Test locally with Mocha-Phantomjs.', [
+    'default',
+    'connect:test',
+    'mocha_phantomjs',
+    'watch:test'
   ])
 
   grunt.registerTask('default', [
